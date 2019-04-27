@@ -17,7 +17,7 @@
     -   [Composer](#composer)
     -   [HTTP Server](#http-server)
 -   [相关配置](#相关配置)
-    -   [Clone 项目](#clone项目)
+    -   [下载项目](#下载项目)
     -   [项目配置](#项目配置)
     -   [运行项目](#运行项目)
 -   [开发约定 (TODO)](#开发约定)
@@ -36,21 +36,22 @@
 
 -   Mysql Server
 -   PHP （>=7.1)
--   NodeJS (>=8.0)
+-   NodeJS (>=8.9.0)
 -   Composer
 -   HTTP Server
 
 ### Mysql
 
-**Linux User(Ubuntu for example):**
+**Linux User(Ubuntu 16.04 for example):**
+
 
 ```shell
-
 sudo apt-get install mariadb-server mariadb-client
-sudo mysql_secure_installation #设置密码
-sudo mysql -u root -p
+sudo mysql_secure_installation #根据要求进行相关配置
+sudo mysql -u root -p #进入mysql
 ```
 
+在mysql中执行以下命令：
 ```mysql
 use mysql;
 update user set plugin='mysql_native_password' where user='root';
@@ -60,20 +61,19 @@ quit;
 
 **Windows User:**
 
-访问[官方网站](https://dev.mysql.com/downloads/installer)， 自行选择合适版本下载并安装
+访问[官方网站](https://dev.mysql.com/downloads/installer)，自行选择合适版本下载并安装
 
 ### PHP
 
-**Linux User(Ubuntu for example):**
+**Linux User(Ubuntu 16.04 for example):**
 
 ```shell
 #添加php源
 sudo add-apt-repository ppa:ondrej/php
 #更新apt数据，载入php源数据
 sudo apt update
-sudo apt-get install php7.1 php7.1-fpm  php7.1-zip php7.1-dev php7.1-json php7.1-mbstring php7.1-mysql php7.1-curl php7.1-xml
-cd /etc/php/7.1/fpm/
-sudo vi php.ini
+sudo apt-get install php7.1 php7.1-fpm  php7.1-zip php7.1-dev php7.1-json php7.1-mbstring php7.1-mysql php7.1-curl php7.1-xml php7.1-gd
+sudo vi /etc/php/7.1/fpm/php.ini  #修改php.ini
 ```
 
 取消下面几行的注释
@@ -83,7 +83,7 @@ sudo vi php.ini
 ;extension=php_mbstring.dll
 ;extension=php_mysqli.dll
 ;extension=php_openssl.dll
-;extension=php_pdo_mysql.dll
+;extension=php_xml.dll
 ```
 
 **Windows User:**
@@ -99,17 +99,7 @@ sudo vi php.ini
 ;extension=php_mbstring.dll
 ;extension=php_mysqli.dll
 ;extension=php_openssl.dll
-;extension=php_pdo_mysql.dll
-```
-
-**macOS User:**
-
-使用 [homebrew](https://brew.sh/) 安装 PHP
-
-```shell
-brew update
-brew search php
-brew install php@7.1 --with-freetype
+;extension=php_xml.dll
 ```
 
 ### Composer
@@ -119,26 +109,55 @@ brew install php@7.1 --with-freetype
 
 ### NodeJS & NPM
 
-请自行访问官网，获取下载及安装方式
+**推荐使用nvm进行安装**
+
+下载nvm安装脚本：
+```shell
+curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh -o install_nvm.sh
+```
+执行脚本：
+
+```shell
+bash install_nvm.sh
+```
+
+根据提示，把相关内容加载到自己所使用的shell配置文件中(如bash的配置文件为`.bashrc`,zsh为`.zshrc`)，一般需要加入的内容如下：
+```ini
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+```
+
+
+
+使用`nvm ls-remote`查看所有可安装的Node.js版本，查看之后选择一个适当的版本进行安装，如：
+```shell
+nvm install 8.11.1
+```
+
+进行相关配置：
+```shell
+nvm alias default 8.11.1
+nvm alias default node
+nvm use default
+```
+
+
 
 ### HTTP Server
 
 可以使用`nginx`，`apache`等 HTTP 服务器
 
-开发环境推荐使用 PHP 内置服务器
+开发环境推荐使用 PHP 内置服务器.
+
 
 ---
 
 ## 相关配置
 
-### Clone 项目
+### 下载项目
 
-通过以下命令来克隆项目(**windows 用户 需要自行安装 git**)
-
-```shell
-git clone https://github.com/CUGBOJ/newhope.git
-```
-
+欢迎使用git来克隆项目，也可以在在网页上进行下载
 请 fork 该项目来进行 pull request
 
 ### 首次运行配置
@@ -147,37 +166,49 @@ git clone https://github.com/CUGBOJ/newhope.git
 
 1.  在数据库中创建一个 Database
 
-2.  复制项目中的`.env.example` 为一个新文件 `.env`。打开`.env`，根据先前的数据库配置情况填写`DB_DATABASE`, `DB_USERNAME` , `DB_PASSWORD`等字段。
+2.  复制项目中的`.env.example` 为一个新文件 `.env`。打开`.env`，根据本地数据库情况填写`DB_DATABASE`, `DB_USERNAME` , `DB_PASSWORD`字段。
 
 3.  安装所有依赖库
 
-```shell
-composer install
-npm i
-```
+    ```shell
+    composer install
+    npm i
+    ```
 
 4.  运行以下命令来生成 laravel 需要的 `key`
 
-```shell
-php artisan key:generate
-```
+    ```shell
+    php artisan key:generate
+    ```
 
 如果你是 linux 用户，请保证`{YourProject}/storage/` 和 `{YourProject}/bootstrap/cache`两个目录具备写入权限。
 
 ### 运行项目
 
-```shell
-composer update
-composer dump-autoload
-php artisan migrate:refresh --seed
-npm install
-npm run dev #npm run watch 可以监控js代码变化，实时编译
-```
+每次从上游获取代码后，需再次运行上述命令以重新安装相关依赖、迁移数据库、部署数据库模式的最新更改。以下命令会经常在开发中使用：
 
 
-每次从上游获取代码后，需再次运行上述命令以重新安装相关依赖、迁移数据库、部署数据库模式的最新更改。
+1. 执行数据库滚动, `--seed` 可以生成假数据：
+    ```
+    php artisan migrate:refresh --seed
+    ```
 
-最后在项目路径下使用以下命令启动 PHP 内置服务器
+2. 执行composer自动加载命令，来写入配置文件
+
+    ```shell
+    composer dump-autoload
+    ```
+3. 更新php与nodejs相关库
+    ```shell
+    composer install
+    npm install
+    ```
+4. 监控js代码变化
+    ```shell
+        npm run dev #可以监控js代码变化，实时编译
+    ```
+
+在项目路径下使用以下命令启动 PHP 内置服务器
 
 ```shell
 php artisan serve
@@ -187,7 +218,9 @@ php artisan serve
 
 可以增加`--port=<the_port_you_want>`参数来指定端口，默认为 8000
 
-打开websocket服务器
+
+
+<!-- 打开websocket服务器
 ```
 npx laravel-echo-server start
 ```
@@ -195,7 +228,7 @@ npx laravel-echo-server start
 加载admin页面资源
 ```
 php artisan vendor:publish --provider="Frozennode\Administrator\AdministratorServiceProvider"
-```
+``` -->
 
 ---
 
@@ -206,6 +239,8 @@ Run PHP tests
 ```
 ./vendor/phpunit/phpunit/phpunit
 ```
+
+
 
 ## 其他
 
