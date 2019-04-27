@@ -24,16 +24,18 @@ class CreateProblemsTable extends Migration
             $table->text('sample_output')->nullable();
             $table->text('hint')->nullable();
             $table->text('source')->nullable();
+
             $table->string('v_name')->default('CUGB');
-
             $table->string('author', 100)->nullable();
-
             $table->boolean('hide')->default(0);
             $table->boolean('special_judge')->default(0);
 
+            //暂时没有发挥作用
             $table->unsignedInteger('time_limit')->nullable()->default(1000);
             $table->unsignedInteger('case_time_limit')->nullalbe()->default(1000);
-            $table->unsignedInteger('memory_limit')->nullable()->default(0);
+            $table->unsignedInteger('memory_limit')->nullable()->default(65535);
+
+            //暂时没有发挥作用
             $table->unsignedInteger('total_ac')->nullable()->default(0);
             $table->unsignedInteger('total_submit')->nullable()->default(0);
             $table->unsignedInteger('total_ac_user')->nullable()->default(0);
@@ -46,6 +48,8 @@ class CreateProblemsTable extends Migration
             $table->unsignedInteger('total_pe')->nullable()->default(0);
             $table->unsignedInteger('total_ole')->nullable()->default(0);
             $table->unsignedInteger('total_rf')->nullable()->default(0);
+
+            
             $table->timestamps();
         });
     }

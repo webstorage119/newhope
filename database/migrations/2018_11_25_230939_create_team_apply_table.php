@@ -14,12 +14,12 @@ class CreateTeamApplyTable extends Migration
     public function up()
     {
         Schema::create('team_apply', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('id', 1)->index()->unsigned();
+            $table->integer('uid');
             $table->integer('team_id');
             $table->boolean('be_deal')->default(false);
             $table->timestamp('deal_time')->nullable();
-            $table->timestamp('create_time');
+            $table->timestamp('created_at');
         });
     }
 

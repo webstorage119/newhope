@@ -20,17 +20,14 @@ class CreateContestsTable extends Migration
             $table->timestamp('end_time')->nullable();
             $table->timestamp('lock_board_time')->nullable();
 
-            $table->string('owner', 255);
             $table->string('password', 2048)->nullable();
             $table->string('title', 255);
-
             $table->longText('description')->nullable();
+            $table->text('info')->nullable();
 
             //if private only user in table contest_user can view.
             $table->boolean('is_private')->default(0);
             $table->boolean('hide_other')->default(0);
-
-            $table->boolean('register_required')->default(false);
         });
     }
 

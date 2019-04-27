@@ -12,7 +12,7 @@ class CreateRepliesTable extends Migration
             $table->integer('topic_id')->index();
             $table->string('username')->index();
             $table->text('content');
-            $table->timestamps();
+            $table->timestamp('created_time');
         });
     }
 

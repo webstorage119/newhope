@@ -15,12 +15,9 @@ class CreateContestUserTable extends Migration
     {
         Schema::create('contest_user', function (Blueprint $table) {
             $table->integer('id', 1)->index()->unsigned();
-            $table->integer('contest_id')->unsigned()->index();
-            $table->integer('user_id')->unsigned()->index();
+            $table->integer('cid')->unsigned()->index();
+            $table->integer('uid')->unsigned()->index();
             $table->integer('team_id')->nullable()->index();
-
-            $table->foreign('contest_id')->references('id')->on('contests')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
