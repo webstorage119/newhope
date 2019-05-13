@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
         $this->call([
             // ProblemsTableSeeder::class,
-            // UsersTableSeeder::class,            
+            UsersTableSeeder::class,            
             // ContestsTableSeeder::class,
             // TeamsTableSeeder::class,
             // StatusesTableSeeder::class,

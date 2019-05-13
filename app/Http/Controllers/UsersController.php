@@ -87,22 +87,6 @@ class UsersController extends Controller
             $data['avatar'] = $this->regenerate_avatar($request->nickname);
         }
 
-        if ($request->register) {
-            $this->validate($request, [
-                'old_oj_account' => 'required|max:50|min:1',
-                'student_id' => 'required|regex:/^\d{10}$/',
-                'gender' => 'required|in:Male,Female,Secret',
-                'major' => 'required|min:1',
-                'info' => 'required|min:30',
-            ]);
-
-            $data['old_oj_account'] = $request->old_oj_account;
-            $data['student_id'] = $request->student_id;
-            $data['gender'] = $request->gender;
-            $data['major'] = $request->major;
-            $data['info'] = $request->info;
-            $data['registered'] = true;
-        }
 
         $user->update($data);
         Auth::login($user);

@@ -30,7 +30,6 @@ Route::post('notifications/{notification}', 'NotificationsController@read_one')-
 
 Route::post('/contests/{contest}', 'ContestsController@add_user_by_password')->name('contests.add_user_by_password');
 
-Route::get('permission', 'StaticPagesController@permission')->name('permission');
 
 // All the rests handled by SPA
 Route::get('/{any}', 'StaticPagesController@home')->where('any', '.*');
