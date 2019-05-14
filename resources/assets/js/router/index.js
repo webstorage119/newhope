@@ -27,6 +27,8 @@ const Practice = () => import('../components/Practice.vue')
 const Problem = () => import('../components/Problem.vue')
 const ProblemEditor = () => import('../components/ProblemEditor.vue')
 
+
+
 const router = new VueRouter({
     mode: 'history',
     saveScrollPosition: true,
@@ -71,14 +73,14 @@ const router = new VueRouter({
             component: UsersTable
         },
         {
+            path: '/user/edit',
+            name: 'edit-profile',
+            component: ProfileEditor
+        },
+        {
             path: '/user/:username',
             name: 'user-show',
             component: Profile
-        },
-        {
-            path: '/user/:username/edit',
-            name: 'edit-profile',
-            component: ProfileEditor
         },
         {
             path: '/statuses',

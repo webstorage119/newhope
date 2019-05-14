@@ -7,6 +7,8 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
+use Mail;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -59,8 +61,9 @@ class UsersController extends Controller
             'avatar' => $this->regenerate_avatar($request->nickname),
         ]);
 
+        $this->sendEmailConfirmationTo($user);
         Auth::login($user);
-
+        
         return response()->json(['message' => 'Register success.'], 200);
     }
 
@@ -73,7 +76,13 @@ class UsersController extends Controller
         $data = [];
         $data['nickname'] = $request->nickname;
         $data['school'] = $request->school;
-        $data['email'] = $request->email;
+        
+        if ($request->email) {
+            $user->activation_token = Str::random(10);
+            $user->activated = false;
+            $data['email'] = $request->email;
+        }
+
         if ($request->password) {
             $data['password'] = bcrypt($request->password);
         }
@@ -88,7 +97,11 @@ class UsersController extends Controller
 
 
         $user->update($data);
+        if($request->email){
+            $this->sendEmailConfirmationTo($user);
+        }
         Auth::login($user);
+        
 
         return response()->json('Update user profile success.');
     }
@@ -110,5 +123,31 @@ class UsersController extends Controller
         \Avatar::create($nickname)->setShape('square')->setDimension(200, 200)->setFontSize(99)
             ->save(public_path() . $avatar_path);
         return $avatar_path;
+    }
+
+    protected function sendEmailConfirmationTo($user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'acm@cugb.edu.cn';
+        $name = 'ACM';
+        $to = $user->email;
+        $subject = "感谢注册 CUGBOJ！请确认你的邮箱。";
+
+        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
+    }
+
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token', $token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        return redirect('');
     }
 }

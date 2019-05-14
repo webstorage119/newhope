@@ -8,15 +8,22 @@
         <p>上传头像</p>
         </Upload>
         <Checkbox v-model="user.regenerate_avatar">重新生成头像</Checkbox>
+
+        <hr>
+        <div>
+        <label for="email">邮箱：</label>
+        <button @click="redirectToMailChange">重新发送邮箱验证</button>
+        <br>
+
+        <Checkbox v-model="user.change_email">修改邮箱</Checkbox>
+        <Input type="email" v-model="user.email" :disabled="user.change_email == false"/>
+        <label>(未认证)</label>
+        </div>
     </Col>
     <Col span="8">
         <div>
         <label for="nickname">昵称：</label>
         <Input type="text" v-model="user.nickname" />
-        </div>
-        <div>
-        <label for="email">邮箱：</label>
-        <Input type="email" v-model="user.email" />
         </div>
         <div>
         <label for="password">新密码：</label>
@@ -50,7 +57,8 @@ export default {
                 school: '',
                 password: '',
                 password_confirmation: '',
-                regenerate_avatar: false
+                regenerate_avatar: false,
+                change_email: false
             }
         }
     },
@@ -89,12 +97,14 @@ export default {
         changeAvatarToFile(file) {
             this.changeAvatar(file.response)
         },
+        redirectToMailChange() {
+
+        },
         submit() {
             let data = new FormData()
 
             const props = [
                 'nickname',
-                'email',
                 'school',
                 'password',
                 'password_confirmation',
@@ -103,6 +113,9 @@ export default {
             ]
             for (let key of props) {
                 data.append(key, this.user[key])
+            }
+            if (this.user.change_email) {
+                data.append('email', this.user['email'])
             }
 
 

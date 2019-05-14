@@ -89,3 +89,7 @@ Route::post('team/{team}','TeamsController@apply');
 Route::get('applyList/{team}','TeamsController@getApplyList');
 Route::post('dealApply/{team}','TeamsController@dealApply');
 Route::post('removeMember/{team}','TeamsController@removeMember');
+
+Route::get('confirmEmail/{token}', 'UsersController@confirmEmail')->name('confirm_email');
+
+

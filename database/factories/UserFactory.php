@@ -29,6 +29,7 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'school' => $faker->name,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'activated' => true,
         'register_time' => $date_time,
         'last_login_time' => $date_time,
         'last_login_ip' => $faker->ipv4,
