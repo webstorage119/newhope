@@ -28,7 +28,7 @@ class UsersController extends Controller
     {
         if ($request->wantsJson()) {
             $user = Auth::User();
-
+            
             if (!empty($username)) {
                 $user = User::where('username', $username)->get()->first();
             }
@@ -37,7 +37,6 @@ class UsersController extends Controller
                 abort(404);
             }
 
-            $user->append('can');
 
             $user->topics;
             return response()->json($user);
