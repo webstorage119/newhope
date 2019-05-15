@@ -27,7 +27,8 @@ const Practice = () => import('../components/Practice.vue')
 const Problem = () => import('../components/Problem.vue')
 const ProblemEditor = () => import('../components/ProblemEditor.vue')
 
-
+const PasswordEmail = () => import('../components/PasswordEmail.vue')
+const PasswordReset = () => import('../components/PasswordReset.vue')
 
 const router = new VueRouter({
     mode: 'history',
@@ -171,6 +172,16 @@ const router = new VueRouter({
                     ]
                 }
             ]
+        },
+        {
+            path: '/password/reset',
+            name: 'password-email',
+            component: PasswordEmail
+        },
+        {
+            path: '/password/reset/:token',
+            name: 'password-reset',
+            component: PasswordReset
         },
         {
             path: '*',

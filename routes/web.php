@@ -33,3 +33,4 @@ Route::post('/contests/{contest}', 'ContestsController@add_user_by_password')->n
 
 // All the rests handled by SPA
 Route::get('/{any}', 'StaticPagesController@home')->where('any', '.*');
+Route::get('password/reset/{token}', 'StaticPagesController@home')->name('password.reset');

@@ -92,4 +92,7 @@ Route::post('removeMember/{team}','TeamsController@removeMember');
 
 Route::get('confirmEmail/{token}', 'UsersController@confirmEmail')->name('confirm_email');
 
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+
 
